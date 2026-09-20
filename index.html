@@ -798,14 +798,14 @@
   </section>
 </main>
 
-<section id="request-status" style="max-width:900px;margin:40px auto;padding:24px;display:none;">
-  <h2>Check Request Status</h2>
-  <p>Enter the Request ID you received after submitting the demo request.</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <input id="statusId" placeholder="NF-XXXXXXXX" style="flex:1;min-width:220px;padding:.8rem;border:3px solid var(--line);border-radius:10px;">
-    <button onclick="checkRequestStatus()" style="padding:.8rem 1.2rem;border:3px solid var(--line);border-radius:10px;font-weight:800;cursor:pointer;">Check</button>
+<section id="request-status" style="max-width:900px;margin:40px auto;padding:28px 24px;border:3px solid var(--line);border-radius:24px;background:var(--cream);box-shadow:8px 8px 0 var(--yellow);">
+  <h2 style="margin-top:0;">Check Your Request Status</h2>
+  <p>Already submitted a request? Enter your Request ID below to see the latest status.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+    <input id="statusId" placeholder="e.g. NF-E6583F74" aria-label="Request ID" style="flex:1;min-width:220px;padding:.9rem;border:3px solid var(--line);border-radius:12px;font:inherit;">
+    <button type="button" onclick="checkRequestStatus()" style="padding:.9rem 1.2rem;border:3px solid var(--line);border-radius:12px;font-weight:800;cursor:pointer;background:var(--pink);color:white;">Check Status</button>
   </div>
-  <div id="statusResult" style="margin-top:14px;font-weight:700;"></div>
+  <div id="statusResult" style="margin-top:16px;font-weight:800;font-size:1.05rem;min-height:1.4em;"></div>
 </section>
 
 <footer>
