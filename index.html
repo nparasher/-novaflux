@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novaflux — AI Automation for Real Businesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@400;500;600;700&family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --hotpink:#FF2E7E;
+    --yellow:#FFC93C;
+    --purple:#6B3FA0;
+    --purple-light:#F1E9FF;
+    --cream:#FFF9F0;
+    --ink:#241436;
+    --cyan:#00B8A9;
+    --line:#241436;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Poppins', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{ font-family:'Baloo 2', cursive; }
+  img,svg{max-width:100%;}
+  ul{list-style:none;}
+  a{color:inherit;}
+
+  /* ---------- marquee ---------- */
+  .marquee-wrap{
+    background:var(--ink); color:var(--yellow);
+    border-bottom:4px solid var(--line);
+    overflow:hidden; white-space:nowrap; padding:9px 0;
+  }
+  .marquee{ display:inline-block; animation: scroll-left 20s linear infinite; font-weight:700; font-size:1rem; }
+  .marquee span{ margin:0 1.2rem; }
+  @keyframes scroll-left{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+  /* ---------- header / nav ---------- */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1rem 6vw; position:sticky; top:0; z-index:100;
+    background:rgba(255,249,240,0.92); backdrop-filter: blur(6px);
+    border-bottom:3px solid var(--ink);
+  }
+  .logo{ display:flex; align-items:center; gap:.5rem; cursor:pointer; }
+  .logo-badge{
+    width:42px; height:42px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #FFE07A, var(--yellow) 55%, var(--hotpink) 100%);
+    border:3px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.25rem;
+    transform:rotate(-8deg);
+    box-shadow:2px 2px 0 var(--ink);
+  }
+  .logo-text{
+    font-family:'Bangers', cursive;
+    font-size:1.7rem;
+    letter-spacing:1px;
+    color:var(--purple);
+    -webkit-text-stroke: 1px var(--ink);
+    transform:rotate(-2deg);
+  }
+  .logo-text .dot{ color:var(--hotpink); }
+  .tagline-strip{
+    text-align:center; background:var(--ink); color:var(--yellow);
+    font-family:'Bangers'; letter-spacing:1px; padding:.5rem 1rem; font-size:1rem;
+  }
+  .tagline-strip span{ color:var(--cream); font-family:'Comic Neue'; font-weight:700; font-size:.82rem; letter-spacing:0; margin-left:.6rem; }
+  nav.mainnav{ display:flex; gap:1.6rem; }
+  nav.mainnav button{
+    background:none; border:none; color:var(--ink); font-family:'Poppins'; font-weight:600;
+    font-size:.95rem; cursor:pointer; padding:.3rem .1rem; position:relative;
+  }
+  nav.mainnav button.active{ color:var(--hotpink); }
+  nav.mainnav button.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-6px; height:3px; background:var(--hotpink); border-radius:3px;
+  }
+  .cta-btn{
+    background:var(--hotpink); color:var(--cream); border:3px solid var(--ink);
+    padding:.6rem 1.3rem; border-radius:50px; font-weight:700; font-family:'Poppins';
+    cursor:pointer; box-shadow:4px 4px 0 var(--yellow); transition: transform .15s ease;
+    text-decoration:none; display:inline-block; font-size:.9rem; white-space:nowrap;
+  }
+  .cta-btn:hover{ transform: translate(-2px,-2px); box-shadow:6px 6px 0 var(--yellow); }
+  .cta-ghost{
+    background:transparent; color:var(--ink); border:3px solid var(--ink);
+    padding:.6rem 1.3rem; border-radius:50px; font-weight:700; text-decoration:none; display:inline-block; cursor:pointer; font-family:'Poppins'; font-size:.9rem;
+  }
+  .navburger{ display:none; background:var(--cream); border:3px solid var(--ink); color:var(--ink); border-radius:10px; padding:.4rem .6rem; font-size:1.1rem; cursor:pointer; }
+
+  /* ---------- page system ---------- */
+  .page{ display:none; }
+  .page.active{ display:block; animation: fadein .3s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:5rem 6vw 4rem; display:grid; grid-template-columns: 1.1fr 0.9fr; gap:3rem; align-items:center; position:relative;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(circle at 15% 20%, rgba(255,46,126,0.10), transparent 40%),
+                radial-gradient(circle at 85% 70%, rgba(0,184,169,0.12), transparent 40%);
+    pointer-events:none;
+  }
+  .badge-sticker{
+    display:inline-block; background:var(--yellow); color:var(--ink); font-weight:700;
+    padding:.4rem 1rem; border-radius:50px; border:3px solid var(--line); transform:rotate(-4deg); font-size:.9rem; margin-bottom:1.3rem;
+  }
+  .hero h1{ font-size:clamp(2.4rem, 5vw, 4.2rem); line-height:1.05; font-weight:800; letter-spacing:-.5px; color:var(--ink); }
+  .hero h1 .stroke{ -webkit-text-stroke: 2px var(--hotpink); color:var(--cream); }
+  .hero p.sub{ margin-top:1.3rem; font-size:1.15rem; max-width:46ch; color:#4A3768; line-height:1.6; }
+  .hero-ctas{ margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap; }
+  .hero-visual{ position:relative; display:flex; align-items:center; justify-content:center; }
+  .blob-card{
+    background:var(--purple); color:var(--cream); border:4px solid var(--line); border-radius:32px 32px 32px 4px;
+    padding:2rem; transform:rotate(3deg); box-shadow:10px 10px 0 var(--hotpink); width:100%; max-width:380px;
+  }
+  .blob-card .stat{ font-family:'Baloo 2'; font-size:2.6rem; font-weight:800; color:var(--yellow); }
+  .blob-card .stat-label{ font-size:.95rem; color:#EDE3FF; margin-bottom:1.4rem; }
+  .mini-tags{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+  .mini-tags span{ background:var(--ink); border:2px solid var(--cyan); color:var(--cyan); padding:.3rem .7rem; border-radius:20px; font-size:.78rem; font-weight:600; }
+
+  /* ---------- section heading ---------- */
+  .section{ padding:4.5rem 6vw; }
+  .section-head{ text-align:center; margin-bottom:2.8rem; }
+  .section-head h2{ font-size:clamp(2rem,3.6vw,2.8rem); font-weight:800; color:var(--ink); }
+  .section-head p{ color:#5C4A7A; max-width:56ch; margin:.8rem auto 0; font-size:1.05rem; }
+  .squiggle{ width:90px; height:14px; margin:0 auto 1rem; display:block; }
+
+  /* ---------- services tabs ---------- */
+  .services-wrap{
+    background:var(--purple-light); border:4px solid var(--line); border-radius:28px; padding:2.2rem; box-shadow:8px 8px 0 var(--cyan);
+  }
+  .tabs{ display:flex; flex-wrap:wrap; gap:.6rem; margin-bottom:2rem; }
+  .tab-btn{
+    background:var(--cream); color:var(--ink); border:3px solid var(--line); padding:.65rem 1.1rem;
+    border-radius:16px; font-weight:700; font-size:.88rem; cursor:pointer; font-family:'Poppins'; transition: all .15s ease; text-align:left;
+  }
+  .tab-btn .num{ color:var(--hotpink); margin-right:.4rem; }
+  .tab-btn.active{ background:var(--hotpink); color:var(--cream); transform:translateY(-3px); box-shadow:4px 4px 0 var(--yellow); }
+  .tab-btn.active .num{ color:var(--yellow); }
+  .tab-panels{ position:relative; }
+  .tab-panel{ display:none; animation: fadein .25s ease; }
+  .tab-panel.active{ display:grid; grid-template-columns: 1.3fr 1fr; gap:2rem; align-items:start;}
+  .panel-title{ font-size:1.6rem; font-weight:800; margin-bottom:.6rem; color:var(--ink); }
+  .panel-target{ display:inline-block; background:var(--yellow); color:var(--ink); padding:.25rem .8rem; border-radius:20px; font-weight:700; font-size:.8rem; margin-bottom:1rem; }
+  .panel-desc{ color:#4A3768; line-height:1.7; font-size:1rem; }
+  .panel-price-box{ background:var(--cream); border:3px dashed var(--cyan); border-radius:18px; padding:1.3rem; }
+  .panel-price-box .price-label{ font-size:.85rem; color:#7A6699; margin-bottom:.3rem; }
+  .panel-price-box .price-val{ font-family:'Baloo 2'; font-size:1.5rem; font-weight:800; color:var(--cyan); margin-bottom:.2rem; }
+  .panel-price-box .price-sub{ font-size:.82rem; color:#7A6699; font-weight:600; margin-bottom:.9rem; }
+
+  /* ---------- process ---------- */
+  .process-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.4rem; }
+  .process-card{
+    background:var(--purple-light); border:4px solid var(--line); border-radius:22px; padding:1.6rem;
+    position:relative; overflow:hidden;
+  }
+  .process-card .pnum{
+    font-family:'Baloo 2'; font-size:2.4rem; font-weight:800; color:rgba(36,20,54,0.10); position:absolute; top:.4rem; right:.8rem;
+  }
+  .process-card h3{ font-size:1.15rem; margin-bottom:.5rem; position:relative; color:var(--ink); }
+  .process-card p{ font-size:.9rem; color:#4A3768; line-height:1.6; position:relative; }
+
+  /* ---------- pricing ---------- */
+  .price-toggle{
+    display:flex; justify-content:center; gap:.6rem; margin-bottom:2.5rem; flex-wrap:wrap;
+  }
+  .price-toggle-btn{
+    background:var(--purple-light); color:var(--ink); border:3px solid var(--line); padding:.7rem 1.4rem;
+    border-radius:50px; font-weight:700; font-size:.92rem; cursor:pointer; font-family:'Poppins'; transition: all .15s ease;
+  }
+  .price-toggle-btn.active{ background:var(--hotpink); color:var(--cream); box-shadow:4px 4px 0 var(--yellow); transform:translateY(-2px); }
+  .price-panel{ display:none; }
+  .price-panel.active{ display:block; animation: fadein .25s ease; }
+  .pricing-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:1.5rem; }
+  .price-card{
+    background:var(--purple-light); border:4px solid var(--line); border-radius:24px; padding:2rem 1.6rem; position:relative; transition: transform .2s ease; color:var(--ink);
+  }
+  .price-card:nth-child(1){ transform:rotate(-2deg); }
+  .price-card:nth-child(3){ transform:rotate(2deg); }
+  .price-card:hover{ transform:translateY(-6px) rotate(0deg); }
+  .price-card.popular{ background:var(--hotpink); color:var(--cream); box-shadow:8px 8px 0 var(--yellow); }
+  .price-card .tag{
+    position:absolute; top:-14px; right:18px; background:var(--cyan); color:var(--cream); font-size:.75rem; font-weight:700;
+    padding:.25rem .7rem; border-radius:20px; border:2px solid var(--line);
+  }
+  .price-card h3{ font-size:1.4rem; margin-bottom:.4rem; }
+  .price-card .amt{ font-family:'Baloo 2'; font-size:2.2rem; font-weight:800; margin:.6rem 0 .1rem; }
+  .price-card .amt-sub{ font-size:.85rem; font-weight:600; margin-bottom:.8rem; opacity:.85; }
+  .price-card li{ padding:.4rem 0; font-size:.92rem; border-bottom:1px dashed rgba(36,20,54,0.2); }
+  .price-card.popular li{ border-bottom:1px dashed rgba(255,255,255,0.3); }
+  .price-card li:last-child{ border-bottom:none; }
+
+  /* ---------- testimonials ---------- */
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+  .testi-card{
+    background:var(--cream); border:3px solid var(--purple); border-radius:20px; padding:1.6rem;
+  }
+  .testi-card p.quote{ font-size:.98rem; line-height:1.65; color:var(--ink); margin-bottom:1rem; }
+  .testi-card .who{ display:flex; align-items:center; gap:.7rem; }
+  .avatar{
+    width:42px; height:42px; border-radius:50%; background:var(--hotpink); color:var(--cream); display:flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2'; font-weight:800; font-size:1rem; border:2px solid var(--yellow);
+  }
+  .who .name{ font-weight:700; font-size:.9rem; color:var(--ink); }
+  .who .role{ font-size:.78rem; color:#7A6699; }
+
+  /* ---------- FAQ accordion ---------- */
+  .faq-list{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:1rem; }
+  .faq-item{ background:var(--purple-light); border:3px solid var(--line); border-radius:16px; overflow:hidden; }
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; color:var(--ink); font-family:'Poppins'; font-weight:700;
+    font-size:1rem; padding:1.1rem 1.4rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  }
+  .faq-q .plus{ font-family:'Baloo 2'; font-size:1.3rem; color:var(--hotpink); transition: transform .2s ease; flex-shrink:0; }
+  .faq-item.open .faq-q .plus{ transform: rotate(45deg); }
+  .faq-a{ max-height:0; overflow:hidden; transition: max-height .25s ease; padding:0 1.4rem; }
+  .faq-item.open .faq-a{ max-height:220px; padding-bottom:1.2rem; }
+  .faq-a p{ font-size:.92rem; color:#4A3768; line-height:1.65; }
+
+  /* ---------- comic storyboard ---------- */
+  .comic-wrap{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem;
+  }
+  .comic-panel{
+    background:#FFFDF5;
+    border:4px solid var(--ink);
+    border-radius:10px;
+    padding:1.4rem 1.2rem 1.6rem;
+    position:relative;
+    box-shadow:6px 6px 0 var(--ink);
+    background-image: radial-gradient(var(--purple-light) 1.4px, transparent 1.4px);
+    background-size:14px 14px;
+    min-height:230px;
+    display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .comic-panel .panel-num{
+    position:absolute; top:10px; left:10px;
+    width:26px; height:26px; border-radius:50%;
+    background:var(--yellow); border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Bangers'; font-size:.9rem; color:var(--ink);
+  }
+  .comic-panel .scene-emoji{
+    font-size:2.8rem; text-align:center; margin-bottom:.6rem;
+    filter:drop-shadow(2px 2px 0 rgba(0,0,0,0.15));
+  }
+  .comic-bubble{
+    background:#fff; border:3px solid var(--ink); border-radius:16px;
+    padding:.7rem .9rem; position:relative;
+    font-family:'Comic Neue'; font-weight:700; font-size:.92rem; color:var(--ink);
+    text-align:center;
+  }
+  .comic-bubble::after{
+    content:""; position:absolute; left:26px; bottom:-14px;
+    border-width:12px 10px 0 0; border-style:solid;
+    border-color:var(--ink) transparent transparent transparent;
+  }
+  .comic-bubble::before{
+    content:""; position:absolute; left:29px; bottom:-9px;
+    border-width:9px 7px 0 0; border-style:solid;
+    border-color:#fff transparent transparent transparent; z-index:1;
+  }
+  .comic-sfx{
+    font-family:'Bangers'; color:var(--hotpink); -webkit-text-stroke:1px var(--ink);
+    font-size:1.4rem; text-align:center; transform:rotate(-4deg); margin-bottom:.3rem;
+  }
+  .comic-panel.villain{ background-color:#FFE9E9; }
+  .comic-panel.hero{ background-color:#E6FFF9; }
+  .comic-panel.win{ background-color:#FFF6DC; }
+  .comic-cta{
+    text-align:center; margin-top:2.5rem;
+  }
+  .comic-cta .big-line{
+    font-family:'Bangers'; font-size:clamp(1.8rem,3.5vw,2.6rem); color:var(--purple);
+    -webkit-text-stroke:1px var(--ink); letter-spacing:1px; transform:rotate(-1deg);
+  }
+  .comic-cta p{ color:#5C4A7A; margin-top:.6rem; max-width:52ch; margin-left:auto; margin-right:auto; }
+
+  /* ---------- about ---------- */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
+  .about-grid .stat-row{ display:flex; gap:1.5rem; margin-top:1.6rem; flex-wrap:wrap; }
+  .about-grid .stat-item{ text-align:left; }
+  .about-grid .stat-item .num{ font-family:'Baloo 2'; font-size:2rem; font-weight:800; color:var(--hotpink); }
+  .about-grid .stat-item .lbl{ font-size:.82rem; color:#5C4A7A; }
+  .about-img-box{
+    background:var(--purple); color:var(--cream); border:4px solid var(--line); border-radius:28px; padding:2rem;
+    box-shadow:8px 8px 0 var(--cyan); transform:rotate(-2deg);
+  }
+  .about-img-box h3{ font-size:1.3rem; margin-bottom:.8rem; color:var(--yellow); }
+  .about-img-box p{ font-size:.95rem; color:#EDE3FF; line-height:1.7; }
+
+  /* ---------- contact ---------- */
+  .contact-band{
+    background:var(--purple); color:var(--cream); border-top:4px solid var(--line); padding:4rem 6vw; text-align:center;
+  }
+  .contact-band h2{ font-size:clamp(1.8rem,3.4vw,2.6rem); margin-bottom:1rem; color:var(--yellow); }
+  .contact-band p{ max-width:52ch; margin:0 auto 1.8rem; font-size:1.05rem; font-weight:500; color:#EDE3FF; }
+  .contact-layout{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; max-width:920px; margin:0 auto; text-align:left; }
+  .contact-form{
+    background:var(--cream); border:4px solid var(--line); border-radius:20px; padding:1.8rem; box-shadow:8px 8px 0 var(--yellow);
+  }
+  .contact-form label{ display:block; font-size:.85rem; font-weight:700; margin-bottom:.3rem; margin-top:.9rem; color:var(--ink); }
+  .contact-form input, .contact-form textarea{
+    width:100%; padding:.7rem .9rem; border-radius:12px; border:2px solid var(--line); font-family:'Poppins'; font-size:.92rem; background:#FFFDF9; color:var(--ink);
+  }
+  .contact-form textarea{ resize:vertical; min-height:80px; }
+  .contact-form button{
+    margin-top:1.3rem; width:100%; background:var(--hotpink); color:var(--cream); border:3px solid var(--line); padding:.8rem;
+    border-radius:14px; font-weight:700; font-size:1rem; cursor:pointer; box-shadow:4px 4px 0 var(--ink);
+  }
+  .contact-form button:hover{ transform:translate(-2px,-2px); }
+  .form-note{ font-size:.8rem; margin-top:.8rem; color:var(--cyan); font-weight:600; display:none; }
+  .form-note.show{ display:block; }
+  .contact-info{ display:flex; flex-direction:column; gap:1.2rem; justify-content:center; }
+  .contact-info .info-card{
+    background:var(--ink); color:var(--cream); border:3px solid var(--line); border-radius:16px; padding:1.2rem 1.4rem;
+  }
+  .contact-info .info-card .lbl{ font-size:.78rem; color:var(--cyan); font-weight:700; margin-bottom:.3rem; }
+  .contact-info .info-card .val{ font-size:1rem; font-weight:600; }
+
+  footer{
+    text-align:center; padding:2.4rem; font-size:.85rem; color:#7A6699; background:var(--cream); border-top:3px solid var(--purple-light);
+  }
+  footer .dot{ color:var(--hotpink); }
+  footer .flinks{ display:flex; justify-content:center; gap:1.2rem; margin-top:.8rem; flex-wrap:wrap; }
+  footer .flinks button{ background:none; border:none; color:#7A6699; font-family:'Poppins'; font-size:.82rem; cursor:pointer; }
+  footer .flinks button:hover{ color:var(--hotpink); }
+
+  /* ---------- floating whatsapp button ---------- */
+  .wa-float{
+    position:fixed; bottom:22px; right:22px; z-index:999;
+    width:58px; height:58px; border-radius:50%;
+    background:#25D366; border:3px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:3px 3px 0 var(--ink);
+    transition: transform .15s ease;
+    text-decoration:none;
+  }
+  .wa-float:hover{ transform: scale(1.08) rotate(-4deg); }
+  .wa-float svg{ width:30px; height:30px; }
+  .wa-float-pulse{
+    position:absolute; inset:0; border-radius:50%; background:#25D366;
+    opacity:.6; animation: wa-pulse 2s ease-out infinite;
+  }
+  @keyframes wa-pulse{
+    0%{ transform:scale(1); opacity:.6; }
+    100%{ transform:scale(1.8); opacity:0; }
+  }
+  @media (max-width:820px){
+    .wa-float{ width:52px; height:52px; bottom:16px; right:16px; }
+    .wa-float svg{ width:26px; height:26px; }
+  }
+
+  @media (max-width:900px){
+    nav.mainnav{ display:none; position:absolute; top:100%; left:0; right:0; background:var(--cream); flex-direction:column; padding:1rem 6vw; border-bottom:3px solid var(--ink); gap:.4rem; }
+    nav.mainnav.open{ display:flex; }
+    .navburger{ display:inline-block; }
+    header .cta-btn{ display:none; }
+  }
+  @media (max-width:820px){
+    .hero{ grid-template-columns:1fr; padding-top:3rem; text-align:center; }
+    .hero p.sub{ margin-left:auto; margin-right:auto; }
+    .hero-ctas{ justify-content:center; }
+    .tab-panel.active{ grid-template-columns:1fr; }
+    .pricing-grid,.testi-grid,.process-grid{ grid-template-columns:1fr; }
+    .comic-wrap{ grid-template-columns:1fr; }
+    .price-card:nth-child(1),.price-card:nth-child(3){ transform:none; }
+    .about-grid,.contact-layout{ grid-template-columns:1fr; }
+    header{ padding:1rem 5vw; }
+  }
+</style>
+</head>
+<body>
+
+<div class="marquee-wrap">
+  <div class="marquee" aria-hidden="true">
+    <span>🚀 AI Voice Receptionist</span>•<span>📧 Inbox Zero Agent</span>•<span>💬 WhatsApp AI Chatbot</span>•<span>🎯 Lead Gen Pipeline</span>•<span>🎬 Content Repurposing</span>•
+    <span>🚀 AI Voice Receptionist</span>•<span>📧 Inbox Zero Agent</span>•<span>💬 WhatsApp AI Chatbot</span>•<span>🎯 Lead Gen Pipeline</span>•<span>🎬 Content Repurposing</span>•
+  </div>
+</div>
+
+<div class="tagline-strip">YEH BACHON KA KHEL HAI! <span>Automation jo lagta hai mushkil, hum use bana dete hain child's play</span></div>
+
+<header>
+  <div class="logo" onclick="goPage('home')">
+    <div class="logo-badge">🚀</div>
+    <div class="logo-text">Nova<span class="dot">flux</span></div>
+  </div>
+  <nav class="mainnav" id="mainnav">
+    <button data-page="home" class="active">Home</button>
+    <button data-page="story">Our Story</button>
+    <button data-page="services">Services</button>
+    <button data-page="pricing">Pricing</button>
+    <button data-page="about">About</button>
+    <button data-page="faq">FAQ</button>
+    <button data-page="contact">Contact</button>
+  </nav>
+  <div style="display:flex; align-items:center; gap:.7rem;">
+    <a href="javascript:void(0)" class="cta-btn" onclick="goPage('contact')">Get a Free Demo</a>
+    <button class="navburger" id="burger" onclick="toggleNav()">☰</button>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<main class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="badge-sticker">✨ Put your business on auto-pilot</span>
+      <h1>Your <span class="stroke">Business</span><br>Runs on AI Now</h1>
+      <p class="sub">Roofer or dentist, agency or YouTuber — we build AI systems that answer calls, clean up inboxes, chase leads, and create content. You focus on growth, the AI handles the busywork.</p>
+      <div class="hero-ctas">
+        <button class="cta-btn" onclick="goPage('services')">See Services ⬇</button>
+        <button class="cta-ghost" onclick="goPage('contact')">Chat on WhatsApp</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="blob-card">
+        <div class="stat">5+</div>
+        <div class="stat-label">Ready-to-launch AI automation systems</div>
+        <div class="stat">24/7</div>
+        <div class="stat-label">Works around the clock, never takes a day off</div>
+        <div class="mini-tags">
+          <span>Voice AI</span><span>WhatsApp Bot</span><span>Cold Outreach</span><span>Content Engine</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#FF2E7E" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>How It Works</h2>
+      <p>4 simple steps — no tech headaches, no long waits.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-card"><span class="pnum">01</span><h3>Free Discovery Call</h3><p>We learn about your business — pain points, repetitive work, and where time is being wasted.</p></div>
+      <div class="process-card"><span class="pnum">02</span><h3>Custom Blueprint</h3><p>We pick the best-fit automation for you and lay out a full plan with pricing.</p></div>
+      <div class="process-card"><span class="pnum">03</span><h3>Build & Train</h3><p>We build the system, train it on your data, and run it through live testing.</p></div>
+      <div class="process-card"><span class="pnum">04</span><h3>Launch & Optimize</h3><p>After go-live we track performance every month and keep making the automation sharper.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#00B8A9" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>What People Are Saying</h2>
+      <p>Small businesses, big results.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <p class="quote">"Missed calls dropped 60% in the very first month. Every lead gets an instant response now."</p>
+        <div class="who"><div class="avatar">R</div><div><div class="name">Rohan S.</div><div class="role">Plumbing Business Owner</div></div></div>
+      </div>
+      <div class="testi-card">
+        <p class="quote">"My inbox is actually manageable now. Urgent emails ping me on Slack, the AI handles the rest."</p>
+        <div class="who"><div class="avatar">P</div><div><div class="name">Priya M.</div><div class="role">Marketing Consultant</div></div></div>
+      </div>
+      <div class="testi-card">
+        <p class="quote">"Since the WhatsApp bot went live, lead qualification takes zero of my time. Only ready buyers reach me."</p>
+        <div class="who"><div class="avatar">A</div><div><div class="name">Aman K.</div><div class="role">Local Gym Owner</div></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ OUR STORY (COMIC) ============ -->
+<main class="page" id="page-story">
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#FF2E7E" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>The Problem. The Fix. Told Like a Comic.</h2>
+      <p>No jargon, no boring slides — here's exactly what we solve and how, panel by panel.</p>
+    </div>
+
+    <div class="comic-wrap">
+      <div class="comic-panel villain">
+        <span class="panel-num">1</span>
+        <div class="comic-sfx">RING RING RING!</div>
+        <div class="scene-emoji">😰📞</div>
+        <div class="comic-bubble">"So many calls today... I can't keep up!"</div>
+      </div>
+
+      <div class="comic-panel villain">
+        <span class="panel-num">2</span>
+        <div class="scene-emoji">📵😤</div>
+        <div class="comic-bubble">"No answer? Fine, I'll just book with someone else."</div>
+      </div>
+
+      <div class="comic-panel villain">
+        <span class="panel-num">3</span>
+        <div class="comic-sfx">💸 LOST!</div>
+        <div class="scene-emoji">📉🙁</div>
+        <div class="comic-bubble">One missed call = one lost customer, every single day.</div>
+      </div>
+
+      <div class="comic-panel hero">
+        <span class="panel-num">4</span>
+        <div class="comic-sfx">WHOOSH!</div>
+        <div class="scene-emoji">🤖🚀</div>
+        <div class="comic-bubble">Enter Nova — your AI sidekick, on duty 24/7.</div>
+      </div>
+
+      <div class="comic-panel hero">
+        <span class="panel-num">5</span>
+        <div class="scene-emoji">🤖📞💬</div>
+        <div class="comic-bubble">Nova answers instantly, books the slot, replies on WhatsApp too.</div>
+      </div>
+
+      <div class="comic-panel win">
+        <span class="panel-num">6</span>
+        <div class="comic-sfx">TA-DA!</div>
+        <div class="scene-emoji">🙂📈🎉</div>
+        <div class="comic-bubble">Happy customer, booked appointment, business owner sipping chai.</div>
+      </div>
+    </div>
+
+    <div class="comic-cta">
+      <div class="big-line">Yeh Bachon Ka Khel Hai!</div>
+      <p>The idiom says complicated things are "not child's play." We flip it — the hardest part of running a business (never missing a lead) becomes as simple as pressing play. That's the whole story.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ SERVICES ============ -->
+<main class="page" id="page-services">
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#FF2E7E" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>5 Standout AI Services</h2>
+      <p>Click a tab to see the full scope and pricing instantly — no endless scrolling.</p>
+    </div>
+
+    <div class="services-wrap">
+      <div class="tabs" id="tabs">
+        <button class="tab-btn active" data-tab="0"><span class="num">01</span>Voice Receptionist</button>
+        <button class="tab-btn" data-tab="1"><span class="num">02</span>Inbox Zero Agent</button>
+        <button class="tab-btn" data-tab="2"><span class="num">03</span>WhatsApp Chatbot</button>
+        <button class="tab-btn" data-tab="3"><span class="num">04</span>Lead Gen Pipeline</button>
+        <button class="tab-btn" data-tab="4"><span class="num">05</span>Content Engine</button>
+      </div>
+
+      <div class="tab-panels">
+        <div class="tab-panel active" data-panel="0">
+          <div>
+            <div class="panel-title">AI Voice Receptionist & Missed-Call Recovery</div>
+            <span class="panel-target">Roofers · Plumbers · Dental & Aesthetic Clinics</span>
+            <p class="panel-desc">Every inbound call gets answered by a natural AI voice, FAQs get handled, appointments get booked or rescheduled, and staff get an instant alert. No missed call ever means a missed customer again.</p>
+          </div>
+          <div class="panel-price-box">
+            <div class="price-label">Setup Fee <em style="color:var(--hotpink); font-style:normal;">(one-time)</em></div>
+            <div class="price-val">₹40,000 – ₹2,50,000</div>
+            <div class="price-label">Monthly Retainer <em style="color:var(--cyan); font-style:normal;">(recurring)</em></div>
+            <div class="price-val">₹12,000 – ₹40,000</div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-panel="1">
+          <div>
+            <div class="panel-title">Inbox Zero & Email Triage Agent</div>
+            <span class="panel-target">Busy Founders · Agency Owners · Consultants</span>
+            <p class="panel-desc">Emails get classified automatically, replies get drafted, low-priority mail gets labeled, and urgent items trigger an instant Telegram/Slack alert. Your inbox stays clean, you stay stress-free.</p>
+          </div>
+          <div class="panel-price-box">
+            <div class="price-label">Monthly Retainer <em style="color:var(--cyan); font-style:normal;">(recurring)</em></div>
+            <div class="price-val">₹12,000 – ₹32,000</div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-panel="2">
+          <div>
+            <div class="panel-title">Hyper-Local Website & WhatsApp AI Chatbot</div>
+            <span class="panel-target">Local Contractors · Gyms · Local Shops</span>
+            <p class="panel-desc">A chatbot trained on your exact pricing, service area, and policies that qualifies leads and books jobs 24/7 — built with tools like Botpress or Voiceflow.</p>
+          </div>
+          <div class="panel-price-box">
+            <div class="price-label">Setup Fee <em style="color:var(--hotpink); font-style:normal;">(one-time)</em></div>
+            <div class="price-val">₹35,000 – ₹1,60,000</div>
+            <div class="price-label">Monthly Maintenance <em style="color:var(--cyan); font-style:normal;">(recurring)</em></div>
+            <div class="price-val">₹6,500 – ₹16,000</div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-panel="3">
+          <div>
+            <div class="panel-title">AI Lead Generation & Cold Outreach Pipeline</div>
+            <span class="panel-target">B2B Service Providers · Consultants</span>
+            <p class="panel-desc">We scrape target profiles, write personalized email/LinkedIn copy, and track conversion sequences — the whole funnel runs on autopilot.</p>
+          </div>
+          <div class="panel-price-box">
+            <div class="price-label">Retainer / Performance <em style="color:var(--cyan); font-style:normal;">(recurring)</em></div>
+            <div class="price-val">₹50,000 – ₹1,25,000+</div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-panel="4">
+          <div>
+            <div class="panel-title">Content Repurposing & Script Engine</div>
+            <span class="panel-target">YouTube Creators · Course Builders · Newsletter Ops</span>
+            <p class="panel-desc">Long-form videos and podcasts turn into newsletters, social clips, and course outlines — delivered straight to Google Docs.</p>
+          </div>
+          <div class="panel-price-box">
+            <div class="price-label">Monthly Content Package <em style="color:var(--cyan); font-style:normal;">(recurring)</em></div>
+            <div class="price-val">₹25,000 – ₹65,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PRICING ============ -->
+<main class="page" id="page-pricing">
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#00B8A9" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>Simple Pricing, Pick What Fits</h2>
+      <p>Two ways to work with us — one project, done and paid once, or a monthly subscription you can cancel anytime.</p>
+    </div>
+
+    <div class="price-toggle" role="tablist">
+      <button class="price-toggle-btn active" data-price="onetime">One-Time Project</button>
+      <button class="price-toggle-btn" data-price="subscription">Monthly Subscription</button>
+    </div>
+
+    <div class="price-panel active" data-price-panel="onetime">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="amt">₹40,000+</div>
+          <ul>
+            <li>One single AI automation (chatbot or inbox agent)</li>
+            <li>Basic integration setup</li>
+            <li>2 week delivery</li>
+            <li>Email support</li>
+          </ul>
+        </div>
+        <div class="price-card popular">
+          <span class="tag">Most Popular</span>
+          <h3>Growth</h3>
+          <div class="amt">₹1,25,000+</div>
+          <ul>
+            <li>2-3 automations combined (voice + chatbot + inbox)</li>
+            <li>Custom training on your data</li>
+            <li>Monthly optimization</li>
+            <li>Priority WhatsApp support</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <h3>Full Stack</h3>
+          <div class="amt">Custom</div>
+          <ul>
+            <li>Complete business automation stack</li>
+            <li>Lead gen + content engine included</li>
+            <li>Dedicated automation manager</li>
+            <li>Quarterly strategy review</li>
+          </ul>
+        </div>
+      </div>
+      <p style="text-align:center; color:#7A6699; font-size:.85rem; margin-top:1.5rem;">Setup is a one-time payment. An optional monthly retainer covers ongoing optimization — see the Services page for per-service rates.</p>
+    </div>
+
+    <div class="price-panel" data-price-panel="subscription">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <span class="tag" style="background:var(--purple); color:var(--cream);">No Setup Fee</span>
+          <h3>Subscribe Lite</h3>
+          <div class="amt">₹9,999<span style="font-size:1rem; font-weight:600;">/mo</span></div>
+          <ul>
+            <li>1 automation of your choice</li>
+            <li>Standard response templates</li>
+            <li>Email support</li>
+            <li>Cancel anytime</li>
+          </ul>
+        </div>
+        <div class="price-card popular">
+          <span class="tag">Best Value</span>
+          <h3>Subscribe Pro</h3>
+          <div class="amt">₹24,999<span style="font-size:1rem; font-weight:600;">/mo</span></div>
+          <ul>
+            <li>Up to 3 automations bundled</li>
+            <li>Custom training included</li>
+            <li>Monthly performance report</li>
+            <li>Priority WhatsApp support</li>
+            <li>Cancel anytime</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <span class="tag" style="background:var(--purple); color:var(--cream);">For Teams</span>
+          <h3>Subscribe Scale</h3>
+          <div class="amt">₹59,999<span style="font-size:1rem; font-weight:600;">/mo</span></div>
+          <ul>
+            <li>Full automation stack, unlimited updates</li>
+            <li>Dedicated account manager</li>
+            <li>Quarterly strategy calls</li>
+            <li>Cancel anytime</li>
+          </ul>
+        </div>
+      </div>
+      <p style="text-align:center; color:#7A6699; font-size:.85rem; margin-top:1.5rem;">No setup fee — pay monthly, in advance, cancel anytime. Annual billing (2 months free) available on request.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ ABOUT ============ -->
+<main class="page" id="page-about">
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#FFC93C" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>Who We Are</h2>
+      <p>An AI automation team that understands the real pain points of small and medium businesses.</p>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p style="color:#4A3768; font-size:1.05rem; line-height:1.8;">Novaflux is an automation studio building practical AI systems for traditional service businesses, local companies, and digital creators — fast to deploy, easy to use, and built to show real ROI. We know most businesses don't have an engineering team, so we handle all the technical heavy lifting.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">50+</div><div class="lbl">Automations Deployed</div></div>
+          <div class="stat-item"><div class="num">5</div><div class="lbl">Core Service Lines</div></div>
+          <div class="stat-item"><div class="num">24/7</div><div class="lbl">System Uptime Focus</div></div>
+        </div>
+      </div>
+      <div class="about-img-box">
+        <h3>Our Mission</h3>
+        <p>Hand repetitive work over to AI, so business owners can spend their time on real growth and customers — not stuck managing inboxes or missed calls.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FAQ ============ -->
+<main class="page" id="page-faq">
+  <section class="section">
+    <div class="section-head">
+      <svg class="squiggle" viewBox="0 0 90 14"><path d="M2 8 Q 12 2, 22 8 T 42 8 T 62 8 T 88 8" fill="none" stroke="#FF2E7E" stroke-width="4" stroke-linecap="round"/></svg>
+      <h2>Frequently Asked Questions</h2>
+      <p>Got more questions? Just message us on WhatsApp.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">How long does setup take?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Most single automations go live in 1-3 weeks. Larger multi-automation projects can take 4-6 weeks — you'll get an exact timeline after the discovery call.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do I need any technical knowledge?<span class="plus">+</span></button>
+        <div class="faq-a"><p>Not at all. We handle the full build, training, and integration ourselves. You just need to share your business details and any necessary access.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What if the automation doesn't work well?<span class="plus">+</span></button>
+        <div class="faq-a"><p>We monitor everything after launch and optimize as needed. Monthly retainer plans include continuous improvement built in.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Which automation is right for my business?<span class="plus">+</span></button>
+        <div class="faq-a"><p>On the free discovery call, we look at your repetitive tasks and pain points and recommend the best-fit service — an honest suggestion, not a sales pitch.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ CONTACT ============ -->
+<main class="page" id="page-contact">
+  <section class="contact-band">
+    <h2>Let's Get Started 🚀</h2>
+    <p>Tell us about your business, and we'll tell you which AI automation saves you the most time and money.</p>
+    <div class="contact-layout">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Your name" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@company.com" required>
+        <label for="biz">Business Type</label>
+        <input type="text" id="biz" placeholder="E.g. Dental clinic, Roofing company, YouTube channel" required>
+        <label for="plan">Interested Plan</label>
+        <select id="plan" style="width:100%;padding:.75rem;border:3px solid var(--line);border-radius:10px;font:inherit;background:white;">
+          <option value="Not sure">Not sure yet</option>
+          <option value="Starter">Starter</option>
+          <option value="Growth">Growth</option>
+          <option value="Scale">Scale</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <label for="msg">What do you need?</label>
+        <textarea id="msg" placeholder="Give us a bit of detail..." required></textarea>
+        <button type="submit">Book Your Free Demo</button>
+        <div class="form-note" id="formNote">Thank you! 🎉 We'll be in touch shortly.</div>
+      </form>
+      <div class="contact-info">
+        <div class="info-card"><div class="lbl">WhatsApp</div><div class="val"><a href="https://wa.me/918880748653" target="_blank" style="color:inherit; text-decoration:underline;">+91 88807 48653</a></div></div>
+        <div class="info-card"><div class="lbl">Email</div><div class="val"><a href="mailto:neerav.parasher@gmail.com" style="color:inherit; text-decoration:underline;">neerav.parasher@gmail.com</a></div></div>
+        <div class="info-card"><div class="lbl">Based In</div><div class="val">Indore, India</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section id="request-status" style="max-width:900px;margin:40px auto;padding:24px;display:none;">
+  <h2>Check Request Status</h2>
+  <p>Enter the Request ID you received after submitting the demo request.</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <input id="statusId" placeholder="NF-XXXXXXXX" style="flex:1;min-width:220px;padding:.8rem;border:3px solid var(--line);border-radius:10px;">
+    <button onclick="checkRequestStatus()" style="padding:.8rem 1.2rem;border:3px solid var(--line);border-radius:10px;font-weight:800;cursor:pointer;">Check</button>
+  </div>
+  <div id="statusResult" style="margin-top:14px;font-weight:700;"></div>
+</section>
+
+<footer>
+  Novaflux — Automation that actually works
+  <div class="flinks">
+    <button onclick="goPage('home')">Home</button>
+    <button onclick="goPage('story')">Our Story</button>
+    <button onclick="goPage('services')">Services</button>
+    <button onclick="goPage('pricing')">Pricing</button>
+    <button onclick="goPage('about')">About</button>
+    <button onclick="goPage('faq')">FAQ</button>
+    <button onclick="goPage('contact')">Contact</button>
+  </div>
+</footer>
+
+<script>
+  // ---- page navigation ----
+  function goPage(name){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+name).classList.add('active');
+    document.querySelectorAll('nav.mainnav button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.page===name);
+    });
+    document.getElementById('mainnav').classList.remove('open');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  document.querySelectorAll('nav.mainnav button').forEach(btn=>{
+    btn.addEventListener('click', ()=>goPage(btn.dataset.page));
+  });
+  function toggleNav(){
+    document.getElementById('mainnav').classList.toggle('open');
+  }
+
+  // ---- services tabs ----
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabBtns.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector('.tab-panel[data-panel="'+btn.dataset.tab+'"]').classList.add('active');
+    });
+  });
+
+  // ---- pricing toggle ----
+  document.querySelectorAll('.price-toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.price-toggle-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.price-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector('.price-panel[data-price-panel="'+btn.dataset.price+'"]').classList.add('active');
+    });
+  });
+
+  // ---- FAQ accordion ----
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click', ()=>{
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // ---- Novaflux request system ----
+  // Paste your deployed Google Apps Script Web App URL here.
+  const NOVAFLUX_API_URL = 'https://script.google.com/macros/s/AKfycbyx3E6E0TKnYo9kWqIQoho61gH3gBLX4ByBfYx-AChMn0v8HcxMdFAmQnWomECLB-ww/exec';
+
+  function showFormMessage(message, ok=true){
+    const note = document.getElementById('formNote');
+    note.textContent = message;
+    note.style.color = ok ? 'var(--cyan)' : '#d60000';
+    note.classList.add('show');
+  }
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    const form = e.target;
+    const button = form.querySelector('button[type="submit"]');
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email') ? document.getElementById('email').value.trim() : '';
+    const biz = document.getElementById('biz').value.trim();
+    const plan = document.getElementById('plan') ? document.getElementById('plan').value : '';
+    const msg = document.getElementById('msg').value.trim();
+
+    if (NOVAFLUX_API_URL.includes('PASTE_')) {
+      showFormMessage('Demo mode: connect the Google Apps Script URL before accepting live requests.', false);
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Sending...';
+    try {
+      const body = new URLSearchParams({action:'create', name, email, business:biz, plan, message:msg});
+      const response = await fetch(NOVAFLUX_API_URL, {method:'POST', body});
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || 'Request failed');
+      form.reset();
+      showFormMessage('Request received! 🎉 Your Request ID is ' + data.requestId + '. Status: Pending.');
+    } catch (err) {
+      showFormMessage('Could not submit right now. Please try again or use WhatsApp.', false);
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Book Your Free Demo';
+    }
+  }
+  async function checkRequestStatus(){
+    const id = document.getElementById('statusId').value.trim();
+    const result = document.getElementById('statusResult');
+    if (!id) { result.textContent='Enter your Request ID.'; return; }
+    if (NOVAFLUX_API_URL.includes('PASTE_')) { result.textContent='Connect the backend URL first.'; return; }
+    result.textContent='Checking...';
+    try {
+      const r = await fetch(NOVAFLUX_API_URL + '?action=status&id=' + encodeURIComponent(id));
+      const d = await r.json();
+      result.textContent = d.ok ? ('Status: ' + d.status + (d.adminNote ? ' — ' + d.adminNote : '')) : d.error;
+    } catch(e) { result.textContent='Unable to check status right now.'; }
+  }
+</script>
+
+<a href="https://wa.me/918880748653?text=Hi%20Novaflux%2C%20I%27d%20like%20to%20know%20more%20about%20your%20AI%20automation%20services" target="_blank" class="wa-float" aria-label="Chat on WhatsApp">
+  <span class="wa-float-pulse"></span>
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="position:relative; z-index:1;">
+    <path fill="#fff" d="M16.004 3C9.377 3 4 8.373 4 15c0 2.31.646 4.47 1.77 6.31L4 29l7.86-1.73A11.93 11.93 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3Zm0 21.6c-1.86 0-3.6-.5-5.1-1.37l-.366-.216-4.66 1.026 1.05-4.54-.24-.38A9.55 9.55 0 0 1 5.4 15c0-5.85 4.76-10.6 10.604-10.6S26.6 9.15 26.6 15 21.85 24.6 16.004 24.6Zm5.79-7.93c-.317-.16-1.876-.926-2.167-1.032-.29-.106-.502-.16-.713.16-.21.318-.818 1.032-1.003 1.244-.185.212-.37.238-.687.08-.317-.16-1.338-.494-2.548-1.573-.942-.84-1.578-1.878-1.763-2.196-.185-.318-.02-.49.14-.65.144-.144.317-.37.476-.556.16-.185.212-.318.317-.53.106-.212.053-.397-.026-.556-.08-.16-.713-1.72-.977-2.356-.257-.617-.518-.534-.713-.544l-.607-.01c-.212 0-.556.08-.847.397-.29.318-1.11 1.085-1.11 2.646s1.137 3.07 1.296 3.282c.16.212 2.238 3.418 5.424 4.793.758.327 1.35.522 1.812.668.762.242 1.455.208 2.003.126.611-.091 1.876-.766 2.14-1.505.264-.74.264-1.373.185-1.505-.08-.132-.29-.212-.607-.37Z"/>
+  </svg>
+</a>
+
+</body>
+</html>
