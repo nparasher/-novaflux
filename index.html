@@ -18,12 +18,23 @@
     --line:#241436;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; background:var(--cream);}
   body{
-    background:var(--cream);
+    background:transparent;
     color:var(--ink);
     font-family:'Poppins', sans-serif;
     overflow-x:hidden;
+    position:relative;
+    isolation:isolate;
+  }
+  .site-background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:
+      linear-gradient(rgba(255,249,240,.82), rgba(255,249,240,.88)),
+      url('assets/novaflux-bg.webp') center center / cover no-repeat;
   }
   h1,h2,h3,.display{ font-family:'Baloo 2', cursive; }
   img,svg{max-width:100%;}
@@ -375,10 +386,17 @@
     .price-card:nth-child(1),.price-card:nth-child(3){ transform:none; }
     .about-grid,.contact-layout{ grid-template-columns:1fr; }
     header{ padding:1rem 5vw; }
+    .site-background{
+      background-image:
+        linear-gradient(rgba(255,249,240,.88), rgba(255,249,240,.92)),
+        url('assets/novaflux-bg.webp');
+    }
   }
 </style>
 </head>
 <body>
+
+<div class="site-background" aria-hidden="true"></div>
 
 <div class="marquee-wrap">
   <div class="marquee" aria-hidden="true">
